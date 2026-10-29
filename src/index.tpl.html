@@ -1,0 +1,277 @@
+<title>レンズ厚みくらべ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/*__CSS__*/
+/* アプリ固有 */
+.topbar{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-2)}
+.appname{font-size:20px;line-height:30px;font-weight:700}
+.stepper{display:flex;gap:var(--space-1);margin:0;padding:0;list-style:none}
+.stepper li{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;line-height:18px;color:var(--ink-muted)}
+.stepper .dot{width:26px;height:26px;border-radius:13px;border:1.5px solid var(--line-strong);display:flex;align-items:center;justify-content:center;font-weight:700;background:var(--surface)}
+.stepper li.on{color:var(--ink);font-weight:700}
+.stepper li.on .dot{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.stepper li.done .dot{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.navrow{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.navrow>*{flex:1 1 160px}
+.linkbtn{background:none;border:0;padding:0;color:var(--primary);text-decoration:underline;font-size:14px;cursor:pointer;text-align:left}
+.mcard{border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2)}
+.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);align-items:end}
+.mgrid label>span.lt{display:block;min-height:18px}
+.where{display:flex;flex-wrap:wrap;gap:var(--space-1) var(--space-2);align-items:baseline;background:var(--primary-soft);border-radius:var(--radius-md);padding:var(--space-2) var(--space-4);font-size:14px;line-height:22px}
+.where b{color:var(--primary)}
+.flow{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--space-2)}
+.flow li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-2);align-items:start;font-size:14px;line-height:22px}
+.flow .num{width:28px;height:28px}
+.flow .opt .num{background:var(--surface);color:var(--primary);border:1.5px dashed var(--primary)}
+@media (max-width:520px){.mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mgrid label,.mfield{display:flex;flex-direction:column;gap:2px;font-size:12px;line-height:18px;color:var(--ink-muted);min-width:0}
+.req{color:var(--danger);margin-left:2px}
+.lrow{display:grid;grid-template-columns:76px minmax(0,1.2fr) minmax(0,1fr);gap:var(--space-2);align-items:center;font-size:14px}
+.lrow label{white-space:nowrap;flex-wrap:nowrap}
+.lrow select,.lrow input{font-size:14px}
+.lrow input[type=checkbox]{width:20px;height:20px;accent-color:var(--primary)}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:var(--space-2)">
+    <div class="topbar"><span class="appname">レンズ厚みくらべ</span><span class="badge">何も保存しません</span><button type="button" class="linkbtn" data-go="a" style="margin-left:auto">このアプリについて</button></div>
+    <ol class="stepper" id="stepper" aria-label="進み具合">
+      <li data-step="1"><span class="dot">1</span>フレーム</li>
+      <li data-step="2"><span class="dot">2</span>AIで調べる</li>
+      <li data-step="3"><span class="dot">3</span>貼り付け</li>
+      <li data-step="4"><span class="dot">4</span>度数</li>
+      <li data-step="5"><span class="dot">5</span>結果</li>
+    </ol>
+    <p class="where" id="where" role="status"></p>
+  </header>
+
+  <!-- 1 フレーム -->
+  <section id="s1" data-screen class="panel" aria-labelledby="h1t">
+    <section aria-labelledby="hflow" style="display:flex;flex-direction:column;gap:var(--space-2);border:1px solid var(--line);border-radius:var(--radius-md);padding:var(--space-4)">
+      <h2 id="hflow">使い方の流れ</h2>
+      <p class="note">フレームとレンズの組み合わせごとにレンズの縁の厚みを計算し、どちらが薄くなるかを比べます。次の5つのステップで進みます。</p>
+      <ol class="flow">
+        <li><span class="num">1</span><span><b>フレーム</b>　比べたいフレームの型番かURLを入力します（この画面）</span></li>
+        <li><span class="num">2</span><span><b>AIで調べる</b>　表示されたプロンプトをお使いのAIに貼り付け、寸法を調べてもらいます</span></li>
+        <li><span class="num">3</span><span><b>貼り付け</b>　AIの回答を貼り付けると、おかしな値がないか自動で確認します</span></li>
+        <li><span class="num">4</span><span><b>度数</b>　度数とPDを入力します（この端末の中だけで使います）</span></li>
+        <li><span class="num">5</span><span><b>結果</b>　どちらが薄いかを、3D表示、断面図、厚みの表で比べます</span></li>
+        <li class="opt"><span class="num">任</span><span><b>手入力（任意）</b>　AIを使わない場合や、AIがうまく調べられなかった場合は、寸法を自分で入力して2と3を省略できます</span></li>
+      </ol>
+    </section>
+    <h1 id="h1t">比べたいフレームを入力</h1>
+    <p class="lead">比べたいフレームの型番、または商品ページのURLを2〜4本入力してください。入力内容はこの画面の中だけで使い、保存や送信は一切しません。</p>
+    <div id="rows" style="display:flex;flex-direction:column;gap:var(--space-2)"></div>
+    <label class="row" for="withLens" style="font-size:14px"><input type="checkbox" id="withLens" checked style="width:20px;height:20px;accent-color:var(--primary)"> フレームごとに選べるレンズ（屈折率、設計、追加料金）も調べる</label>
+    <button type="button" class="primary" id="toPrompt">プロンプトを作る</button>
+    <p class="msg ng" id="s1msg" role="alert"></p>
+    <p class="note">AIを使わずに、寸法を自分で入力することもできます。<button type="button" class="linkbtn" data-go="m">寸法を自分で入力する（任意）</button></p>
+  </section>
+
+  <!-- 2 プロンプト -->
+  <section id="s2" data-screen class="panel" aria-labelledby="h2t" hidden>
+    <h1 id="h2t">AIに寸法を調べてもらう</h1>
+    <ol class="lead" style="margin:0;padding-left:20px">
+      <li>下のプロンプトをコピーします</li>
+      <li>ウェブ検索ができるAI（ChatGPT、Claude、Geminiなど）に貼り付けて送信します</li>
+      <li>返ってきた回答をすべてコピーし、次の画面に貼り付けます</li>
+    </ol>
+    <pre id="prompt" style="max-height:340px;overflow:auto"></pre>
+    <div class="row"><button type="button" class="ghost" id="copyPrompt">プロンプトをコピー</button><span class="note" id="copiedPrompt" role="status"></span></div>
+    <p class="note">プロンプトに度数やPDは含まれません。AIに伝わるのは、フレームの型番やURLだけです。</p>
+    <div class="navrow"><button type="button" class="ghost" data-go="1">戻る</button><button type="button" class="primary" data-go="3">AIの回答を貼り付ける</button></div>
+  </section>
+
+  <!-- 3 貼り付け -->
+  <section id="s3" data-screen class="panel" aria-labelledby="h3t" hidden>
+    <h1 id="h3t">AIの回答を貼り付け</h1>
+    <label class="field" for="input">AIの回答をそのまま貼り付けてください（前後に説明文があっても読み取れます）
+      <textarea id="input" spellcheck="false"></textarea>
+    </label>
+    <button type="button" class="primary" id="run">チェックする</button>
+    <div id="out" style="display:flex;flex-direction:column;gap:var(--space-4)"></div>
+    <p class="note">AIがうまく調べられなかった場合は、<button type="button" class="linkbtn" id="toManualFix">寸法を自分で入力・修正する（任意）</button>画面に進めます。<br>試しに使ってみたい場合は、<button type="button" class="linkbtn" id="useSample">見本のデータを入れる</button>こともできます。</p>
+    <div class="navrow"><button type="button" class="ghost" data-go="2">戻る</button><button type="button" class="primary" id="toRx" disabled>度数の入力へ</button></div>
+  </section>
+
+  <!-- 任意 手入力 -->
+  <section id="sm" data-screen class="panel" aria-labelledby="hmt" hidden>
+    <h1 id="hmt">寸法を自分で入力する（任意）</h1>
+    <p class="lead">商品ページに記載された寸法を入力してください。<span class="req">＊</span>は必須項目です。入力した値は「手入力」として扱います。</p>
+    <div id="mcards" style="display:flex;flex-direction:column;gap:var(--space-4)"></div>
+    <div class="row"><button type="button" class="ghost" id="mAdd">フレームを追加</button><span class="note">最大4本まで</span></div>
+    <div id="mout" style="display:flex;flex-direction:column;gap:var(--space-2)"></div>
+    <div class="navrow"><button type="button" class="ghost" id="mBack">戻る</button><button type="button" class="primary" id="mUse">この内容で比較する</button></div>
+  </section>
+
+  <!-- 4 度数 -->
+  <section id="s4" data-screen class="panel" aria-labelledby="h4t" hidden>
+    <h1 id="h4t">度数とPDを入力</h1>
+    <p class="lead">処方箋やお店の控えに記載された値を入力してください。度数とPDはこの画面の中だけで計算に使い、AIやサーバーには送りません。</p>
+    <div class="rx">
+      <span></span><span class="th">球面 S</span><span class="th">乱視 C</span><span class="th">軸 AX</span>
+      <span class="eye">右</span>
+      <input class="inp" id="rS" aria-label="右 球面" inputmode="decimal" value="-3.00">
+      <input class="inp" id="rC" aria-label="右 乱視" inputmode="decimal" value="-0.50">
+      <input class="inp" id="rA" aria-label="右 軸" inputmode="numeric" value="180">
+      <span class="eye">左</span>
+      <input class="inp" id="lS" aria-label="左 球面" inputmode="decimal" value="-3.25">
+      <input class="inp" id="lC" aria-label="左 乱視" inputmode="decimal" value="-0.75">
+      <input class="inp" id="lA" aria-label="左 軸" inputmode="numeric" value="170">
+    </div>
+    <p class="note">近視（マイナスの度数）向けの計算です。遠視（プラスの度数）には対応していません。最初に入っている値は見本です。</p>
+    <div class="seg" role="group" aria-label="PDの書き方">
+      <button type="button" id="pdMono" aria-pressed="true">片目ずつ</button>
+      <button type="button" id="pdBin" aria-pressed="false">両目の合計</button>
+    </div>
+    <div id="pdMonoBox" class="pick">
+      <label class="field" for="pdR">右のPD（mm）<input class="inp" id="pdR" inputmode="decimal" value="32.0"></label>
+      <label class="field" for="pdL">左のPD（mm）<input class="inp" id="pdL" inputmode="decimal" value="32.0"></label>
+    </div>
+    <label id="pdBinBox" class="field" for="pdT" hidden>両目のPD（mm）<input class="inp" id="pdT" inputmode="decimal" value="64.0"></label>
+    <label class="field" for="eyeH">黒目の高さ（レンズの上下中央から何mm上か。不明なら0のまま）<input class="inp" id="eyeH" inputmode="decimal" value="0"></label>
+    <div class="navrow"><button type="button" class="ghost" id="s4back">戻る</button><button type="button" class="primary" data-go="5">比較を見る</button></div>
+  </section>
+
+  <!-- 5 比較 -->
+  <section id="s5" data-screen aria-labelledby="h5t" hidden style="display:flex;flex-direction:column;gap:var(--space-4)">
+    <div class="panel">
+      <h1 id="h5t">比較結果</h1>
+      <div class="pick">
+        <label class="la" for="selA"><span><span class="sw sa" aria-hidden="true"></span>A</span><select id="selA"></select></label>
+        <label class="lb" for="selB"><span><span class="sw sb" aria-hidden="true"></span>B</span><select id="selB"></select></label>
+      </div>
+      <p class="note">「このフレームでは選べない」とされたレンズは表示していません。</p>
+    </div>
+    <p class="msg ng" id="errBox" role="alert" hidden></p>
+    <div class="verdict v-u" id="verdict" role="status">計算中です</div>
+
+    <section class="panel" aria-labelledby="h-view">
+      <h2 id="h-view">見た目</h2>
+      <div class="seg" role="group" aria-label="表示の切り替え">
+        <button type="button" data-mode="side" aria-pressed="true">並べる</button>
+        <button type="button" data-mode="over" aria-pressed="false">重ねる</button>
+        <button type="button" data-mode="sec" aria-pressed="false">断面</button>
+      </div>
+      <div class="stage" id="stSide">
+        <div class="views">
+          <div style="position:relative"><canvas id="cA" aria-label="Aの3D表示"></canvas><span class="cap" id="capA">A</span></div>
+          <div style="position:relative"><canvas id="cB" aria-label="Bの3D表示"></canvas><span class="cap" id="capB">B</span></div>
+        </div>
+        <span class="approx">形は近似</span>
+      </div>
+      <div id="overBox" hidden style="display:flex;flex-direction:column;gap:var(--space-2)">
+        <div class="seg" role="group" aria-label="重ねて見るもの">
+          <button type="button" data-show="both" aria-pressed="true">両方</button>
+          <button type="button" data-show="A" aria-pressed="false"><span class="sw sa" aria-hidden="true"></span>Aだけ</button>
+          <button type="button" data-show="B" aria-pressed="false"><span class="sw sb" aria-hidden="true"></span>Bだけ</button>
+        </div>
+        <div class="stage one" id="stOver">
+          <canvas id="cO" aria-label="AとBのレンズを重ねた3D表示"></canvas>
+          <span class="cap" style="top:8px"><span class="sw sa" aria-hidden="true"></span>A 青（実線）</span><span class="cap" style="top:32px"><span class="sw sb" aria-hidden="true"></span>B 緑（破線）</span>
+          <span class="approx">形は近似</span>
+        </div>
+        <p class="note">重ねる表示では、左目のレンズだけを、黒目の位置をそろえて拡大しています（厚み方向はさらに3倍）。太い線はレンズの表側と裏側の縁、薄い塗りは側面です。Aは青の実線、Bは緑の破線です。同じ線の2本の間隔が広いほど、縁が厚いことを示します。</p>
+      </div>
+      <div class="stage" id="stSec" hidden><canvas id="sec" width="1200" height="620" aria-label="左目の横と縦の断面"></canvas></div>
+      <div class="seg" role="group" aria-label="見る向き" id="camSeg">
+        <button type="button" data-cam="iso" aria-pressed="true">斜め</button>
+        <button type="button" data-cam="front" aria-pressed="false">正面</button>
+        <button type="button" data-cam="top" aria-pressed="false">上から</button>
+      </div>
+      <div class="legend" id="legend"><span>1mm</span><span class="ramp" aria-hidden="true"></span><span>6mm</span><span>色は厚みを表します（薄いほど淡い赤、厚いほど濃い赤）。1本指で回転、2本指で拡大できます。</span></div>
+    </section>
+
+    <section class="panel" aria-labelledby="h-num">
+      <h2 id="h-num">縁の厚み（mm）</h2>
+      <div class="tbl-wrap"><table id="compare-table">
+        <thead><tr><th scope="col"></th><th scope="col">耳側</th><th scope="col">鼻側</th><th scope="col">上</th><th scope="col">下</th><th scope="col">最大</th><th scope="col">はみ出し</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th scope="col"></th><th scope="col">フレーム</th><th scope="col">レンズ追加</th><th scope="col">合計</th></tr></thead>
+        <tbody id="price"></tbody>
+      </table></div>
+      <p class="note">はみ出しは、レンズがリムより後ろ（目の側）に出る量の見込みです。<span class="est">黄色の背景</span>の数値は、推定値を含む結果です。</p>
+    </section>
+
+    <section class="panel" aria-labelledby="h-cau">
+      <h2 id="h-cau">この結果の注意点</h2>
+      <ul class="cautions" id="cautions"></ul>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <div class="navrow">
+      <button type="button" class="ghost" data-go="4">度数を修正する</button>
+      <button type="button" class="ghost" data-go="1">フレームを変える</button>
+      <button type="button" class="primary" id="saveImg">結果を画像で保存</button>
+    </div>
+    <p class="note" id="saveMsg" role="status"></p>
+  </section>
+
+  <!-- このアプリについて -->
+  <section id="sa" data-screen class="panel" aria-labelledby="hat" hidden>
+    <h1 id="hat">このアプリについて</h1>
+    <p class="lead">レンズ厚みくらべは、フレームの寸法と度数から縁の厚みを計算し、2つのレンズを見比べるためのウェブアプリです。</p>
+
+    <h2>このアプリがしないこと</h2>
+    <ul class="cautions">
+      <li>入力した度数、PD、フレームの情報を保存しません。ページを閉じると消えます</li>
+      <li>入力した情報をどこにも送信しません。計算はすべてお使いのブラウザの中で行います。外部と通信できないよう、ブラウザの設定（CSP）でも止めています</li>
+      <li>AIを内蔵していません。アプリが作るのはAIに渡す文章（プロンプト）だけで、そこに度数やPDは含まれません</li>
+    </ul>
+
+    <h2>ご注意</h2>
+    <ul class="cautions">
+      <li>表示される厚みは計算による推定値です。実際の仕上がりは、お店の加工方法、中心の厚みの設定、フレームの形によって変わります。購入前にお店で確認してください</li>
+      <li>医療上の助言ではありません。度数やレンズ選びについては眼科医や眼鏡店にご相談ください</li>
+      <li>フレームの形は、いくつかの基本形で近似しています。キャットアイや六角形のような形は再現しきれないため、結果の画面にその旨を表示します</li>
+      <li>度数が強い場合（強い方向で -6.00 を超える場合）は、較正した範囲の外になるため注意を表示します。-8.00 を超える場合は「どちらが薄いか」の判定を表示しません</li>
+      <li>フレームの傾き（前傾角やそり角）は計算に含めていません</li>
+    </ul>
+
+    <h2>計算のしくみ</h2>
+    <ul class="cautions">
+      <li>レンズの前面と後面のカーブから、縁の各点の厚みを求めています。左右それぞれのPDと、瞳の高さも計算に使います</li>
+      <li>1.60、1.67、1.74 は、眼鏡店アイベリーのページに載っている「レンズ厚み比較表」のうち非球面の行から、屈折率ごとに9点（度数 -4.00、-5.00、-6.00 で、中心から 25、30、35mm の位置）を使って調整しました。ずれは最大 0.1mm です（<a href="https://www.rakuten.ne.jp/gold/eye-berry/image/info/info_2.html" target="_blank" rel="noopener noreferrer">アイベリー, "レンズ厚み比較表," 楽天市場, accessed October 27, 2026</a>）。表を作ったメーカー名はページに書かれていません</li>
+      <li>1.76 は、れんず屋のページに載っている東海光学 ZX-AS 1.76 のフチ厚3点に合うよう調整しました。ずれは最大 0.02mm です（<a href="https://www.lensya.com/single/maker/tokai/zx-as/index.html" target="_blank" rel="noopener noreferrer">れんず屋, "東海光学 ZX-AS 1.76非球面設計," accessed October 27, 2026</a>）。3点だけで合わせていることと、中心の厚みが公表されておらず 1.74 と同じ 1.0mm と仮定していることから、ほかの屈折率より確かさは低めです</li>
+      <li>両面非球面の効果は、比べられる厚みの表が見つからなかったため、控えめに見積もった推定値です</li>
+      <li>レンズのカーブから厚みを出す計算の土台は、Chadwick Optical の厚み計算機と、両面が球面のレンズ8ケースで照合しました。差は最大 0.001mm でした（<a href="https://chadwickoptical.com/resources/optical-calculators/lens-thickness/" target="_blank" rel="noopener noreferrer">Chadwick Optical, "Lens Thickness," accessed October 27, 2026</a>）</li>
+    </ul>
+
+    <h2>ソースコードとライセンス</h2>
+    <ul class="cautions">
+      <li id="repoLine">ソースコードは GitHub で公開しています（<a href="https://github.com/yakrk/lens-thickness-compare" target="_blank" rel="noopener noreferrer">github.com/yakrk/lens-thickness-compare</a>）。公開中のファイルとソースが同じかどうかは、README に載せている SHA-256 の値で確かめられます</li>
+      <li>このアプリは MIT ライセンスです</li>
+      <li>3D表示には three.js r128 を使っています（MIT ライセンス、Copyright © 2010-2021 three.js authors、<a href="https://github.com/mrdoob/three.js/releases/tag/r128" target="_blank" rel="noopener noreferrer">three.js authors, "three.js r128," GitHub, accessed October 27, 2026</a>）</li>
+    </ul>
+    <div class="navrow"><button type="button" class="ghost" id="aBack">戻る</button></div>
+  </section>
+
+  <p class="note">このアプリは、入力や貼り付けた内容を保存・送信しません。厚みは計算による目安です。購入前にお店で確認してください。<button type="button" class="linkbtn" data-go="a" style="font-size:12px;margin-left:4px">このアプリについて</button></p>
+</div>
+
+<script>
+window.addEventListener('error',function(e){
+  var box=document.getElementById('errBox');if(!box)return;
+  var cross=!e.filename||e.message==='Script error.';
+  box.hidden=false;
+  box.textContent=cross?'外部の3D部品でエラーが起きました（内容はブラウザの制限で見えません）。数字と断面は使えます。':('エラーが起きました：'+e.message+'（'+(e.lineno||'?')+'行目）');
+});
+</script>
+<!--__THREE__-->
+<script>
+/*__ENGINE__*/
+</script>
+<script>
+/*__CHECK__*/
+</script>
+<script>
+/*__PROMPT__*/
+</script>
+<script>
+(function(){
+'use strict';
+/*__APP__*/
+})();
+</script>

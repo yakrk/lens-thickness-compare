@@ -1,0 +1,170 @@
+{
+  "checked_on": "2026-10-27",
+  "frames": [
+    {
+      "input": "SMP-A01",
+      "brand": "サンプル眼鏡A",
+      "model": "SMP-A01",
+      "name": "メタル ウェリントン",
+      "url": "https://example.com/a01",
+      "size_label": "52□19-145",
+      "lens_width_mm": 52,
+      "bridge_mm": 19,
+      "lens_height_mm": 4.1,
+      "temple_mm": 145,
+      "material": "metal",
+      "rim_type": "full",
+      "price_jpy": 16500,
+      "shape_type": "wellington",
+      "corner": "medium",
+      "rim_width_mm": 1.8,
+      "rim_depth_mm": null,
+      "evidence": {
+        "lens_width_mm": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "bridge_mm": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "lens_height_mm": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "price_jpy": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "shape_type": {
+          "level": "estimate",
+          "source": "https://example.com/a01"
+        },
+        "rim_width_mm": {
+          "level": "estimate",
+          "source": "https://example.com/a01"
+        },
+        "rim_depth_mm": {
+          "level": "not_found",
+          "source": null
+        }
+      },
+      "lens_options": [
+        {
+          "index": 1.6,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        {
+          "index": 1.67,
+          "design": "aspheric",
+          "extra_jpy": 3300,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        {
+          "index": 1.74,
+          "design": "aspheric",
+          "extra_jpy": null,
+          "available": false,
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        {
+          "index": 1.76,
+          "design": "double_aspheric",
+          "extra_jpy": 11000,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/a01"
+        }
+      ]
+    },
+    {
+      "input": "SMP-B02",
+      "brand": "サンプル眼鏡B",
+      "model": "SMP-B02",
+      "name": "コンビ ボストン",
+      "url": "https://example.com/b02",
+      "size_label": "49□21-140",
+      "lens_width_mm": 49,
+      "lens_height_mm": 42,
+      "temple_mm": 140,
+      "material": "combination",
+      "rim_type": "full",
+      "price_jpy": 13200,
+      "shape_type": "boston",
+      "corner": "round",
+      "rim_width_mm": 2.5,
+      "rim_depth_mm": null,
+      "evidence": {
+        "lens_width_mm": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "bridge_mm": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "lens_height_mm": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "price_jpy": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "shape_type": {
+          "level": "estimate",
+          "source": "https://example.com/b02"
+        },
+        "rim_width_mm": {
+          "level": "estimate",
+          "source": "https://example.com/b02"
+        },
+        "rim_depth_mm": {
+          "level": "not_found",
+          "source": null
+        }
+      },
+      "lens_options": [
+        {
+          "index": 1.6,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        {
+          "index": 1.67,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        {
+          "index": 1.74,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        {
+          "index": 1.76,
+          "design": "double_aspheric",
+          "extra_jpy": 12000,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        }
+      ]
+    }
+  ]
+}

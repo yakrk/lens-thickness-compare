@@ -22,6 +22,7 @@
 
 公式に公開しているのは次のURLだけです。
 
+- ソースコード https://github.com/yakrk/lens-thickness-compare
 - アプリ 公開後に追記します
 - デモ 公開後に追記します
 
@@ -34,8 +35,8 @@
 現在のソースから作られるファイルの値は次のとおりです（`dist/SHA256SUMS.txt` と同じ）。
 
 ```
-901c422ecb2e27215db2a6bb65845787be48477dff8738e573ce3235eb798644  index.html
-395c8b4faea2c2c0faadb31cd16ff8605bcff707c5fd2ed54309997c58eea69a  demo.html
+39cbe88f31c6401dc62ab2d3cfc81854080e322f0db459274ec9543abfb95c69  index.html
+16d95aa0ed03f2d811fb84c6f829ad31cfb84da16e28a1c548a25de1db694faf  demo.html
 ```
 
 Windows の PowerShell では、次のコマンドで公開中のファイルをそのまま取り込み、値を確かめられます。ブラウザの「名前を付けて保存」はファイルの中身を書き換えることがあるため、照合には使わないでください。PowerShell は値を大文字で表示しますが、大文字と小文字の違いは無視して比べてください。

@@ -1,0 +1,28 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const ctx=await b.newContext({viewport:{width:400,height:900},acceptDownloads:true});const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+__dirname+'/../dist/index.html');await p.waitForTimeout(300);
+const vis=async()=>p.evaluate(()=>[...document.querySelectorAll('[data-screen]')].filter(s=>!s.hidden).map(s=>s.id).join());
+const out=[];
+await p.click('#toPrompt');out.push('1本未満で: '+await p.textContent('#s1msg'));
+await p.fill('#b0','ブランドA');await p.fill('#m0','ABC-0001');await p.fill('#b1','ブランドB');await p.fill('#m1','DEF-0002');
+await p.click('#toPrompt');out.push('画面 '+await vis()+' プロンプト先頭 '+(await p.textContent('#prompt')).slice(0,30));
+await p.click('#s2 [data-go="3"]');out.push('画面 '+await vis());
+await p.fill('#input',require('fs').readFileSync(__dirname+'/../samples/01_正常_3本.txt','utf8'));await p.click('#run');out.push('チェック '+await p.textContent('.summary')+' 次へ有効 '+!(await p.isDisabled('#toRx')));
+await p.click('#toRx');out.push('画面 '+await vis());
+await p.fill('#pdR','31');await p.fill('#pdL','35');await p.fill('#eyeH','2');
+await p.click('#s4 [data-go="5"]');await p.waitForTimeout(300);out.push('画面 '+await vis()+' 判定 '+await p.textContent('#verdict'));
+out.push('表 '+(await p.textContent('#tbody')).slice(0,160));
+await p.click('#s5 [data-go="4"]');await p.fill('#lS','-9');await p.click('#s4 [data-go="5"]');await p.waitForTimeout(300);out.push('強い度数 判定 '+await p.textContent('#verdict'));
+await p.click('[data-mode=sec]');await p.waitForTimeout(200);
+const [dl]=await Promise.all([p.waitForEvent('download',{timeout:5000}).catch(()=>null),p.click('#saveImg')]);
+if(dl){await dl.saveAs(__dirname+'/saved.png');out.push('画像保存 '+dl.suggestedFilename());}else out.push('画像保存 なし');
+// 手入力
+await p.click('#s5 [data-go="1"]');await p.click('#s1 [data-go="m"]');out.push('画面 '+await vis()+' 段階表示 '+!(await p.isHidden('#stepper')));
+await p.fill('#mw0','52');await p.fill('#md0','19');await p.fill('#mh0','41');await p.fill('#mm1','XYZ');
+await p.click('#mUse');out.push('手入力 不足時 '+((await p.textContent('#mout'))||'').slice(0,80));
+await p.fill('#mw1','50');await p.fill('#md1','20');await p.fill('#mh1','40');await p.check('#ml1_174');await p.fill('#mlf1_174','5500');
+await p.click('#mUse');out.push('画面 '+await vis());await p.click('#s4 [data-go="5"]');await p.waitForTimeout(300);
+out.push('手入力 選択肢 '+(await p.$$eval('#selA option',o=>o.map(x=>x.textContent))).join(' | '));
+out.push('判定 '+await p.textContent('#verdict'));
+out.push('横はみ出し '+await p.evaluate(()=>document.documentElement.scrollWidth));
+console.log(out.join('\n'));console.log('errors',errs);await b.close();})();

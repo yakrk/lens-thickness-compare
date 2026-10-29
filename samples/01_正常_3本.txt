@@ -1,0 +1,244 @@
+3本のフレームについて、公式サイトの情報を調べました。
+
+```json
+{
+  "checked_on": "2026-10-27",
+  "frames": [
+    {
+      "input": "SMP-A01",
+      "brand": "サンプル眼鏡A",
+      "model": "SMP-A01",
+      "name": "メタル ウェリントン",
+      "url": "https://example.com/a01",
+      "size_label": "52□19-145",
+      "lens_width_mm": 52,
+      "bridge_mm": 19,
+      "lens_height_mm": 41,
+      "temple_mm": 145,
+      "material": "metal",
+      "rim_type": "full",
+      "price_jpy": 16500,
+      "shape_type": "wellington",
+      "corner": "medium",
+      "rim_width_mm": 1.8,
+      "rim_depth_mm": null,
+      "evidence": {
+        "lens_width_mm": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "bridge_mm": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "lens_height_mm": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "price_jpy": {
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        "shape_type": {
+          "level": "estimate",
+          "source": "https://example.com/a01"
+        },
+        "rim_width_mm": {
+          "level": "estimate",
+          "source": "https://example.com/a01"
+        },
+        "rim_depth_mm": {
+          "level": "not_found",
+          "source": null
+        }
+      },
+      "lens_options": [
+        {
+          "index": 1.6,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        {
+          "index": 1.67,
+          "design": "aspheric",
+          "extra_jpy": 3300,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        {
+          "index": 1.74,
+          "design": "aspheric",
+          "extra_jpy": null,
+          "available": false,
+          "level": "official",
+          "source": "https://example.com/a01"
+        },
+        {
+          "index": 1.76,
+          "design": "double_aspheric",
+          "extra_jpy": 11000,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/a01"
+        }
+      ]
+    },
+    {
+      "input": "SMP-B02",
+      "brand": "サンプル眼鏡B",
+      "model": "SMP-B02",
+      "name": "コンビ ボストン",
+      "url": "https://example.com/b02",
+      "size_label": "49□21-140",
+      "lens_width_mm": 49,
+      "bridge_mm": 21,
+      "lens_height_mm": 42,
+      "temple_mm": 140,
+      "material": "combination",
+      "rim_type": "full",
+      "price_jpy": 13200,
+      "shape_type": "boston",
+      "corner": "round",
+      "rim_width_mm": 2.5,
+      "rim_depth_mm": null,
+      "evidence": {
+        "lens_width_mm": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "bridge_mm": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "lens_height_mm": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "price_jpy": {
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        "shape_type": {
+          "level": "estimate",
+          "source": "https://example.com/b02"
+        },
+        "rim_width_mm": {
+          "level": "estimate",
+          "source": "https://example.com/b02"
+        },
+        "rim_depth_mm": {
+          "level": "not_found",
+          "source": null
+        }
+      },
+      "lens_options": [
+        {
+          "index": 1.6,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        {
+          "index": 1.67,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        {
+          "index": 1.74,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        },
+        {
+          "index": 1.76,
+          "design": "double_aspheric",
+          "extra_jpy": 12000,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/b02"
+        }
+      ]
+    },
+    {
+      "input": "SMP-C03",
+      "brand": "サンプル眼鏡C",
+      "model": "SMP-C03",
+      "name": "樹脂 スクエア 大きめ",
+      "url": "https://example.com/c03",
+      "size_label": "55□17-148",
+      "lens_width_mm": 55,
+      "bridge_mm": 17,
+      "lens_height_mm": 44,
+      "temple_mm": 148,
+      "material": "plastic",
+      "rim_type": "full",
+      "price_jpy": 9900,
+      "shape_type": "square",
+      "corner": "sharp",
+      "rim_width_mm": 3.5,
+      "rim_depth_mm": 4.5,
+      "evidence": {
+        "lens_width_mm": {
+          "level": "official",
+          "source": "https://example.com/c03"
+        },
+        "bridge_mm": {
+          "level": "official",
+          "source": "https://example.com/c03"
+        },
+        "lens_height_mm": {
+          "level": "official",
+          "source": "https://example.com/c03"
+        },
+        "price_jpy": {
+          "level": "official",
+          "source": "https://example.com/c03"
+        },
+        "shape_type": {
+          "level": "estimate",
+          "source": "https://example.com/c03"
+        },
+        "rim_width_mm": {
+          "level": "estimate",
+          "source": "https://example.com/c03"
+        },
+        "rim_depth_mm": {
+          "level": "official",
+          "source": "https://example.com/c03"
+        }
+      },
+      "lens_options": [
+        {
+          "index": 1.6,
+          "design": "aspheric",
+          "extra_jpy": 0,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/c03"
+        },
+        {
+          "index": 1.74,
+          "design": "aspheric",
+          "extra_jpy": 5500,
+          "available": true,
+          "level": "official",
+          "source": "https://example.com/c03"
+        }
+      ]
+    }
+  ]
+}
+```
+
+以上です。不明な項目は null にしています。
